@@ -1,0 +1,75 @@
+********PRACTICA 6   PROGRAMACION DECLARATIVA********
+**** Jesus Angel Perez-Roca Fernandez (infjpf02) ****
+*****************************************************
+
+
+SUMA DE TIPOS
+
+Considere los siguientes tipos de datos definidos en ocaml: 
+
+type 'a arbolbin1 = ArbolVacio | Nodo1 of 'a arbolbin1 * 'a * 'a arbolbin1;;
+
+type 'a arbolbin2 = Hoja of 'a | Nodo2 of 'a arbolbin2 * 'a * 'a arbolbin2;; 
+
+Ambos podrían servir para representar arboles binarios con los nodos etiquetados con valores de tipo 'a. 
+La diferencia fundamental entre ambos es que el primero admitiría la representación de un arbol vacío, mientras que
+el segundo no. 
+
+Defina las siguientes funciones:
+
+altura1 : 'a arbolbin1 -> int
+
+	let rec altura1 = function
+		ArbolVacio -> 0
+		|Nodo1(a,b,c) -> 1+(max (altura1 a) (altura1 c));;
+		
+altura2 : 'a arbolbin2 -> int 
+
+        let rec altura2 = function
+        	Hoja c -> 1
+        	|Nodo2(a,b,c) -> 1+(max (altura2 a),(altura2 c));;
+        	
+preorden1 : 'a arbolbin1 -> 'a list
+
+	let rec preorden1 = function
+ 		ArbolVacio -> []
+ 		|Nodo1(a,b,c) -> b::((preorden1 a) @ (preorden1 c));;
+ 		
+inorden1 : 'a arbolbin1 -> 'a list
+
+	let rec inorden1 = function
+		ArbolVacio -> []
+		|Nodo1(a,b,c) -> inorden1 a @ [b] @ inorden1 c;;
+		
+inorden2 : 'a arbolbin2 -> 'a list 
+
+	let rec inorden2 = function
+		Hoja a -> [a]
+		|Nodo2 (a,b,c) -> inorden2 a @ [b] @ inorden2 c;;
+		
+postorden2 : 'a arbolbin2 -> 'a list
+
+        let rec postorden2 = function
+                Hoja a -> [a]
+                |Nodo2 (a,b,c) -> postorden2 a @ postorden c @ [b];;
+                
+hojas1 : 'a arbolbin1 -> 'a list 
+
+	let rec hojas1 = function
+		ArbolVacio -> []
+		|Nodo1 (ArbolVacio,b,ArbolVacio) -> [b]
+		|Nodo1(a,b,c) -> (hojas1 a) @ (hojas1 c);;
+		
+hojas2 : 'a arbolbin2 -> 'a list
+
+	let rec hojas2 = function
+		Hoja c -> [c]
+		|Nodo2 (a,b,c) -> (hojas2 a) @ (hojas2 c);;    
+		
+arbolbin1_to_2 : 'a arbolbin1 -> 'a arbolbin2  
+
+	let rec arbolbin1_to_2 = function
+	ArbolVacio -> raise(Failure "arbolbin1_to_2")
+	|Nodo1 (ArbolVacio, a , ArbolVacio) -> Hoja a 
+	|Nodo1 (a,b,c) -> Nodo2 ((arbolbin1_to_2 a),b,(arbolbin1_to_2 c));;            	
+		

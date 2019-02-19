@@ -1,0 +1,156 @@
+
+********PRACTICA 5   PROGRAMACION DECLARATIVA********
+**** Jesús Ángel Pérez-Roca Fernández (infjpf02) ****
+*****************************************************
+
+
+DEFINIR LAS SIGUIENTES FUNCIONES
+
+FUNCION						FUNCION EQUIVALENTE
+
+ insert_sort 					 let rec insert_sort l=match l with
+             							     []->[]
+             							     |h::t->let rec aux x l=match l with
+									                  []->[x]
+                 									  |h::t->if x <= h then x::l else h::aux x t in aux h (insert_sort t);;
+
+ merge_sort			 		 
+
+let rec merge_sort l=match l with					 
+[]->[]
+|h::t-> let rec repartir=function 
+                    []->([],[])
+		    |h::[]->([h],[])
+		    |h1::h2::t->let (t1,t2)=repartir t in (h1::t1,h2::t2)
+in let rec fusion=function
+	   ([],l)->l
+	  |(l,[])->l
+	  |(h1::t1,h2::t2)->if h1<h2 then h1::fusion(t1,h2::t2)
+				     else h2::fusion(h1::t1,t2)
+in let (l1,l2)=repartir l in fusion(merge_sort l1,merge_sort l2);;
+										
+
+ quicksort					 let rec quicksort=function
+								[]->[]
+								|h::t->let rec split x=function
+											     []->([],[])
+											     |h::t->let(t1,t2)=split h t in if h<=x then (h::t1,t2) 
+																    else (t1,h::t2) in let(t1,t2)=split h t
+																				 	    in (quicksort t1)@(h::quicksort t2);;
+ from0to					 exception From0to of string;;
+						 let from0to n=match n with
+							         0->[0]
+							         |n->if n<0 then raise(From0to "No se pueden poner numeros negativos")
+									    else let rec aux n=match n with
+								 	     		     0->[0]
+								 	     		     |n->n::aux (n-1)
+												  		   in List.rev(aux n);;
+
+ to0from					 exception To0from of string;;
+						 let rec to0from n=match n with
+								 0->[0]
+								 |n->if n<0 then raise(To0from "No se pueden poner numeros negativos")
+									    else n::to0from (n-1);;
+
+ fromto m n					 exception Fromto of string;;
+						 let rec fromto m n=match n with
+								  0->let rec aux n=match n with
+								 		 0->[0]
+								 		 |n->if n<0 then raise(Fromto "No se pueden poner numeros negativos") else n::aux (n-1) in aux m
+								  |n->if (m<n) then raise(Fromto "El primer numero debe ser mayor que el segundo")
+									       else (if m=n then [m] 
+											    else match m with
+													0->let rec aux2 n=match n with
+										         				0->[0]
+							         							|n->if n<0 then raise(Fromto "No se pueden poner numeros negativos")
+									    							   else let rec aux n=match n with
+								 		 					 			    0->[0]
+								 		 					 			    |n->if n<0 then raise(Fromto "No se pueden poner numeros negativos") else n::aux (n-1) in List.rev(aux n) in aux2 n
+													|m->if (m<0 or n<0) then raise(Fromto "No se pueden poner numeros negativos") 
+												   			    else m::(fromto (m-1) n));;
+
+ randomlist					 exception Randomlist of string;;
+						 let rec randomlist m n=match n with
+								      0->[]
+								      |n->if (n<0) then raise(Randomlist "No se pueden poner numeros negativos")
+										   else (if (m<=0) then raise(Randomlist "El primer numero debe ser mayor que 0") else (Random.int m)::(randomlist m (n-1)));;
+
+
+HACER UNA TABLA CON LOS TIEMPOS APROXIMADOS UTILIZADOS POR LAS FUNCIONES insert_sort, merge_sort Y quicksort PARA ORDENAR LISTAS DE 4 LONGITUDES SIGNIFICATIVAS
+
+FUNCION		LISTA			TIEMPO APROXIMADO
+
+ insert_sort	 from0to 2000		 0
+
+		 from0to 4000		 0.0499999999997
+
+		 from0to 8000		 0.0599999999999
+
+		 from0to 16000		 0.0600000000004
+
+		 to0from 2000		 2.2
+
+		 to0from 4000		 10.65
+		
+		 to0from 8000		 57.34
+		 
+		 to0from 16000		 312.74
+
+		 randomlist 100 2000	 0.99
+		
+		 randomlist 100 4000	 4.78
+	
+		 randomlist 100 8000	 25.15
+
+		 randomlist 100 16000	 136.54
+
+
+ merge_sort	 from0to 2000
+
+		 from0to 4000
+
+		 from0to 8000
+
+		 from0to 16000
+
+		 to0from 2000
+
+		 to0from 4000
+		
+		 to0from 8000
+		 
+		 to0from 16000
+
+		 randomlist 100 2000
+		
+		 randomlist 100 4000
+	
+		 randomlist 100 8000
+
+		 randomlist 100 16000
+
+
+ quicksort	 from0to 2000		 5.28
+
+		 from0to 4000		 25.54
+
+		 from0to 8000		 
+
+		 from0to 16000
+
+		 to0from 2000
+
+		 to0from 4000
+		
+		 to0from 8000
+		 
+		 to0from 16000
+
+		 randomlist 100 2000
+		
+		 randomlist 100 4000
+	
+		 randomlist 100 8000
+
+		 randomlist 100 16000
+

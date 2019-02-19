@@ -1,0 +1,11 @@
+FUNCION FROM0TO:
+
+	# let rec from0to = function 
+
+
+
+FUNCION FROMTO:
+
+	# let rec fromto m = function n -> if m>n then raise(Failure "fromto") else if m=n then m::[] else m::fromto (m+1) n;;
+	val fromto : int -> int -> int list = <fun>
+
